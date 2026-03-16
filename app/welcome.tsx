@@ -1,12 +1,12 @@
 import Button from '@/components/Button';
 import { useRouter } from 'expo-router';
 import {
-    Image,
     StyleSheet,
     Text,
     useWindowDimensions,
     View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WelcomeScreen() {
     const router = useRouter();
@@ -14,34 +14,41 @@ export default function WelcomeScreen() {
     const horizontalPadding = 20
 
     return (
-        <View style={styles.container}>
-            <Image
-                source={require('../assets/images/cooking.png')}
-                style={[styles.image, { width: screenWidth - horizontalPadding * 2 }]}
-                resizeMode="contain"
-            />
+        <SafeAreaView style={styles.container}>
+            {/* Top content */}
+            <View style={styles.content}>
+                <View style={styles.iconWrapper}>
+                    <Text style={styles.tiffinEmoji}>🍱</Text>
+                </View>
 
-            <Text style={styles.title}>Welcome</Text>
-            <Text style={styles.subtitle}>
-                Let’s get started with your journey
-            </Text>
+                <Text style={styles.title}>Meal Box</Text>
+                <Text style={styles.tagline}>
+                    Fresh homemade meals delivered
+                </Text>
 
-            <Button
-                title="Register"
-                variant="fill"
-                fullWidth
-                onPress={() => router.push('/(auth)/register')}
-            />
+                <Text style={styles.description}>
+                    Subscribe to your favorite vendors{'\n'}
+                    Get daily fresh tiffins at your doorstep
+                </Text>
+            </View>
 
-            <View style={{ height: 14 }} />
-
-            <Button
-                title="Login"
-                variant="outline"
-                fullWidth
-                onPress={() => router.push('/(auth)/login')}
-            />
-        </View>
+            {/* Bottom buttons */}
+            <View style={styles.footer}>
+                <Button
+                    title="Sign Up"
+                    variant="outline"
+                    fullWidth
+                    onPress={() => router.push('/(auth)/register')}
+                />
+                <View style={{ height: 14 }} />
+                <Button
+                    title="Login"
+                    variant="fill"
+                    fullWidth
+                    onPress={() => router.push('/(auth)/login')}
+                />
+            </View>
+        </SafeAreaView>
     );
 }
 
@@ -49,24 +56,49 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        padding: 24,
+        paddingHorizontal: 20,
+    },
+
+    content: {
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    image: {
-        width: '100%',
-        height: 260,
-        marginBottom: 30,
+
+    iconWrapper: {
+        width: 140,
+        height: 140,
+        borderRadius: 70,
+        backgroundColor: '#FBE7CC',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 24,
     },
+    tiffinEmoji: {
+        fontSize: 48,
+      },
     title: {
-        fontSize: 30,
+        fontSize: 28,
         fontWeight: '700',
+        color: '#111827',
         marginBottom: 8,
     },
-    subtitle: {
+
+    tagline: {
+        fontSize: 18,
+        fontWeight: '500',
+        color: '#374151',
+        marginBottom: 20,
+    },
+
+    description: {
         fontSize: 16,
-        color: '#666',
+        color: '#6B7280',
         textAlign: 'center',
-        marginBottom: 40,
-    }
+        lineHeight: 22,
+    },
+
+    footer: {
+        paddingBottom: 32,
+    },
 });

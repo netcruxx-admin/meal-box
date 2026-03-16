@@ -1,6 +1,5 @@
-import { fonts } from '@/constants/theme'
-import { StyleProp, TouchableOpacity, ViewStyle } from 'react-native'
-import AppText from './AppText'
+import { colors, fonts } from '@/constants/theme'
+import { StyleProp, Text, TouchableOpacity, ViewStyle } from 'react-native'
 
 type ButtonProps = {
   onPress?: () => void
@@ -25,9 +24,9 @@ export default function Button({
       disabled={disabled}
       style={[
         {
-          backgroundColor: variant === 'fill' ? '#111' : 'transparent',
-          borderColor: '#111',
-          borderWidth: 1,
+          backgroundColor: variant === 'fill' ? colors.primary : 'transparent',
+          borderColor: colors.primary,
+          borderWidth: 2,
           width: fullWidth ? '100%' : 'auto',
           justifyContent: 'center',
           alignItems: 'center',
@@ -39,14 +38,14 @@ export default function Button({
         style,
       ]}
     >
-      <AppText
+      <Text
         style={{
-          color: variant === 'fill' ? '#fff' : '#111',
+          color: variant === 'fill' ? '#ffffff' : colors.primary,
           fontSize: fonts.size.md,
         }}
       >
         {title}
-      </AppText>
+      </Text>
     </TouchableOpacity>
   )
 }

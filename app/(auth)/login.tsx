@@ -1,11 +1,14 @@
+import AppText from '@/components/AppText';
 import Button from '@/components/Button';
 import GoBack from '@/components/GoBack';
+import { colors } from '@/constants/theme';
 import { useLoginMutation } from '@/services/authApi';
 import { saveToken } from '@/utils/authStorage';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -16,7 +19,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!phone || !password) {
-      alert('Phone and password are required');
+      Toast.show({ type: 'error', text1: 'Phone and password are required' });
       return;
     }
 
@@ -27,10 +30,10 @@ export default function LoginScreen() {
       }).unwrap();
 
       await saveToken(res.token);
-      alert('Login successful.');
+      Toast.show({ type: 'success', text1: 'Login successful' });
       router.replace('/(tabs)');
     } catch (err: any) {
-      alert(err?.data?.message || 'Login failed');
+      Toast.show({ type: 'error', text1: err?.data?.message || 'Login failed' });
     }
   };
 
@@ -40,8 +43,17 @@ export default function LoginScreen() {
         <GoBack />
       </View>
       <View style={styles.form_container}>
-        <Text style={styles.title}>Login</Text>
+        <View style={styles.header}>
+          <AppText type="title">
+            Welcome Back
+          </AppText>
 
+          <AppText>
+            Login to continue enjoying fresh tiffins
+          </AppText>
+        </View>
+
+        <AppText style={styles.label}>Phone</AppText>
         <TextInput
           value={phone}
           onChangeText={setPhone}
@@ -52,6 +64,7 @@ export default function LoginScreen() {
 
         />
 
+        <AppText style={styles.label}>Password</AppText>
         <TextInput
           placeholder="Password"
           value={password}
@@ -65,11 +78,12 @@ export default function LoginScreen() {
           variant="fill"
           fullWidth
           onPress={handleLogin}
+          disabled={isLoading}
         />
 
         <TouchableOpacity onPress={() => router.push('/(auth)/register')}>
           <Text style={styles.linkText}>
-            Don’t have an account? Register
+            Don&apos;t have an account? <Text style={styles.link}>Sign Up</Text>
           </Text>
         </TouchableOpacity>
       </View>
@@ -95,6 +109,17 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     textAlign: 'center',
   },
+  header: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 40
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 6,
+    color: '#111',
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ddd',
@@ -105,7 +130,12 @@ const styles = StyleSheet.create({
   },
   linkText: {
     textAlign: 'center',
-    marginTop: 16,
+    marginTop: 18,
+    fontSize: 14,
     color: '#555',
+  },
+  link: {
+    color: colors.primary,
+    fontWeight: '600',
   },
 });

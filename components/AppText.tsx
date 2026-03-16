@@ -1,4 +1,4 @@
-import { fonts } from '@/constants/theme'
+import { colors, fonts } from '@/constants/theme'
 import { StyleSheet, Text, TextProps } from 'react-native'
 
 export type AppTextProps = TextProps & {
@@ -53,16 +53,16 @@ const styles = StyleSheet.create({
   default: {
     fontSize: fonts.size.md,
     lineHeight: fonts.lineHeight.md,
-    // color: colors.text,
+    color: colors.text,
   },
   title: {
     fontSize: fonts.size['2xl'],
     lineHeight: fonts.lineHeight['2xl'],
-    // color: colors.text,
+    color: '#1F2937',
   },
   subTitle: {
     fontSize: fonts.size.lg,
     lineHeight: fonts.lineHeight.lg,
-    // color: colors.text,
+    color: '#1F2937',
   },
 })

@@ -22,7 +22,7 @@ export default function Index() {
     checkAuth();
   }, []);
 
-  if (loading) return null; 
+  if (loading) return null;
 
   return isLoggedIn ? (
     <Redirect href="/(tabs)" />

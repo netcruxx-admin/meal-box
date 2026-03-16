@@ -1,29 +1,43 @@
-import { colors, fonts } from '@/constants/theme'
-import Entypo from '@expo/vector-icons/Entypo'
+import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
 type GoBackProps = {
   marginBottom?: number
   paddingHorizontal?: number
+  bgColor?: string
+  fallbackRoute?: string
 }
 
 export default function GoBack({
-  marginBottom,
-  paddingHorizontal,
+  marginBottom = 0,
+  paddingHorizontal = 0,
+  bgColor = '#E5E7EB',
+  fallbackRoute = '/(tabs)',
 }: GoBackProps) {
   const router = useRouter()
+
+  const handleBack = () => {
+    if (router.canGoBack()) {
+      router.back()
+    } else {
+      router.replace(fallbackRoute as any)
+    }
+  }
 
   return (
     <View
       style={[
         styles.header,
-        { marginBottom: marginBottom, paddingHorizontal: paddingHorizontal },
+        { marginBottom, paddingHorizontal },
       ]}
     >
-      <TouchableOpacity style={styles.touchable} onPress={() => router.back()}>
-        <Entypo name='chevron-left' size={24} color={colors.text} />
-        <Text style={styles.text}>Back</Text>
+      <TouchableOpacity
+        style={[styles.backBtn, { backgroundColor: bgColor }]}
+        onPress={handleBack}
+        activeOpacity={0.8}
+      >
+        <Ionicons name="arrow-back" size={20} />
       </TouchableOpacity>
     </View>
   )
@@ -33,16 +47,12 @@ const styles = StyleSheet.create({
   header: {
     paddingVertical: 10,
   },
-  touchable: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+
+  backBtn: {
+    width: 35,
+    height: 35,
+    borderRadius: 28,
     alignItems: 'center',
-    gap: 4,
-  },
-  text: {
-    fontSize: fonts.size.md,
-    lineHeight: fonts.lineHeight.md,
-    color: colors.text,
+    justifyContent: 'center',
   },
 })

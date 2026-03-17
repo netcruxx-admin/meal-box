@@ -114,7 +114,7 @@ export default function VendorDetailsScreen({ vendorId }: Props) {
                         </View>
                     </View>
 
-                    <AppText style={styles.sectionTitle}>This Week's Menu</AppText>
+                    <Text style={styles.sectionTitle}>This Week's Menu</Text>
 
                     {DAYS.map((day, index) => {
                         const dayMenu = menu?.[day];
@@ -124,9 +124,9 @@ export default function VendorDetailsScreen({ vendorId }: Props) {
                         return (
                             <View key={day} style={styles.menuCard}>
                                 <View style={styles.menuHeader}>
-                                    <AppText style={styles.dayTitle}>
+                                    <Text style={styles.dayTitle}>
                                         {day.charAt(0).toUpperCase() + day.slice(1)}
-                                    </AppText>
+                                    </Text>
 
                                     <AppText style={styles.dateText}>
                                         {getDateForDay(index)}

@@ -1,4 +1,5 @@
 import Button from '@/components/Button';
+import GoBack from '@/components/GoBack';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/services/userApi';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -107,9 +108,9 @@ export default function EditProfileScreen() {
     }
   };
 
-
   return (
     <View style={styles.container}>
+      <GoBack />
       <Text style={styles.header}>Edit Profile</Text>
 
       <TextInput

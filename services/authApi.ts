@@ -24,6 +24,7 @@ export const authApi = baseApi.injectEndpoints({
         body: {
           phone: data.phone,
           password: data.password,
+          role: data.role || 'user'
         },
       }),
     }),

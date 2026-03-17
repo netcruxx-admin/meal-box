@@ -4,6 +4,7 @@ import GoBack from '@/components/GoBack';
 import { colors } from '@/constants/theme';
 import { useLoginMutation } from '@/services/authApi';
 import { saveToken } from '@/utils/authStorage';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -14,6 +15,7 @@ export default function LoginScreen() {
   const router = useRouter();
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const [login, { isLoading, error }] = useLoginMutation();
 
@@ -27,6 +29,7 @@ export default function LoginScreen() {
       const res = await login({
         phone,
         password,
+        role: 'user'
       }).unwrap();
 
       await saveToken(res.token);
@@ -65,13 +68,18 @@ export default function LoginScreen() {
         />
 
         <AppText style={styles.label}>Password</AppText>
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          style={styles.input}
-          secureTextEntry
-        />
+        <View style={styles.passwordWrapper}>
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            style={styles.passwordInput}
+            secureTextEntry={!showPassword}
+          />
+          <TouchableOpacity onPress={() => setShowPassword(prev => !prev)} style={styles.eyeBtn}>
+            <Ionicons name={showPassword ? 'eye-off-outline' : 'eye-outline'} size={22} color="#9ca3af" />
+          </TouchableOpacity>
+        </View>
 
         <Button
           title="Login"
@@ -127,6 +135,22 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
     fontSize: 16,
+  },
+  passwordWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 14,
+    fontSize: 16,
+  },
+  eyeBtn: {
+    paddingHorizontal: 14,
   },
   linkText: {
     textAlign: 'center',

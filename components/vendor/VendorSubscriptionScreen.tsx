@@ -173,7 +173,7 @@ export default function VendorSubscriptionScreen({ vendorId }: Props) {
           title={isSubscribing ? "Subscribing..." : "Subscribe Now"}
           variant="fill"
           fullWidth
-          disabled={isSubscribing}
+          disabled={isSubscribing || selectedPlanData.price <= 0}
           onPress={() => handleSubscribe(selectedPlanData)}
         />
       </View>

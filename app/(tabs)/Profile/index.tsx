@@ -1,12 +1,18 @@
 import Button from '@/components/Button';
+import { useGetMySubscriptionsQuery } from '@/services/subscriptionApi';
 import { useGetProfileQuery } from '@/services/userApi';
 import { removeToken } from '@/utils/authStorage';
 import { useRouter } from 'expo-router';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function ProfileScreen() {
   const { data, isLoading, error } = useGetProfileQuery(undefined);
+  const { data: subData } = useGetMySubscriptionsQuery(undefined);
   const router = useRouter();
+
+  const activeSubscription = subData?.subscriptions?.find(
+    (sub: any) => sub.status === 'active' || sub.status === 'paused'
+  );
 
   if (isLoading) {
     return (
@@ -33,6 +39,7 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
       <View>
         <Text style={styles.header}>Profile</Text>
 
@@ -55,12 +62,33 @@ export default function ProfileScreen() {
           )}
         </View>
 
-        {/* Future Subscription Section */}
+        {/* Subscription Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Meal Subscription</Text>
-          <Text style={styles.subText}>No active subscription</Text>
+          {activeSubscription ? (
+            <View style={[styles.subCard, activeSubscription.status === 'active' ? styles.activeSubCard : styles.pausedSubCard]}>
+              <View style={styles.subCardHeader}>
+                <Text style={styles.subVendor}>{activeSubscription.vendor?.businessName}</Text>
+                <View style={[styles.badge, activeSubscription.status === 'active' ? styles.activeBadge : styles.pausedBadge]}>
+                  <Text style={styles.badgeText}>
+                    {activeSubscription.status === 'active' ? 'Active' : 'Paused'}
+                  </Text>
+                </View>
+              </View>
+              <Text style={styles.subPlan}>
+                {activeSubscription.planType === 'weekly' ? 'Weekly Plan' : 'Monthly Plan'}
+              </Text>
+              <View style={styles.subRow}>
+                <Text style={styles.subLabel}>Ends on:</Text>
+                <Text style={styles.subValue}>{new Date(activeSubscription.endDate).toDateString()}</Text>
+              </View>
+            </View>
+          ) : (
+            <Text style={styles.subText}>No active subscription</Text>
+          )}
         </View>
       </View>
+      </ScrollView>
 
       <View style={styles.buttonContainer}>
         <Button
@@ -118,6 +146,63 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     gap: 10,
-    flexDirection: 'column'
-  }
+    flexDirection: 'column',
+    paddingVertical: 16,
+  },
+  subCard: {
+    borderRadius: 12,
+    padding: 14,
+    borderWidth: 1,
+  },
+  activeSubCard: {
+    backgroundColor: '#f0fdf4',
+    borderColor: '#22c55e',
+  },
+  pausedSubCard: {
+    backgroundColor: '#fffbeb',
+    borderColor: '#f59e0b',
+  },
+  subCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  subVendor: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  subPlan: {
+    fontSize: 14,
+    color: '#4b5563',
+    marginBottom: 8,
+  },
+  subRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  subLabel: {
+    color: '#6b7280',
+    fontSize: 14,
+  },
+  subValue: {
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  badge: {
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: 8,
+  },
+  activeBadge: {
+    backgroundColor: '#22c55e',
+  },
+  pausedBadge: {
+    backgroundColor: '#f59e0b',
+  },
+  badgeText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 12,
+  },
 });

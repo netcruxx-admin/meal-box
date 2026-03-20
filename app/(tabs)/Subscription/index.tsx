@@ -21,8 +21,8 @@ export default function MySubscriptionsScreen() {
 
   const filtered = subscriptions.filter((sub: any) =>
     tab === "active"
-      ? sub.status === "active" || sub.status === "paused"
-      : sub.status === "completed" || sub.status === "cancelled"
+      ? ["pending", "accepted"].includes(sub.status)
+      : ["rejected", "completed", "cancelled"].includes(sub.status)
   );
 
   return (
@@ -73,18 +73,26 @@ export default function MySubscriptionsScreen() {
           ]}
         >
           <View style={styles.cardHeader}>
-            <Text style={styles.vendor}>{sub.vendor?.businessName}</Text>
+            <Text style={styles.vendor}>{sub.vendor?.businessName || sub.vendor?.name}</Text>
 
             <View
               style={[
                 styles.badge,
-                sub.status === "active"
+                sub.status === "accepted"
                   ? styles.activeBadge
-                  : styles.pauseBadge,
+                  : sub.status === "pending"
+                    ? styles.pendingBadge
+                    : styles.rejectedBadge,
               ]}
             >
               <Text style={styles.badgeText}>
-                {sub.status === "active" ? "Active" : "Paused"}
+                {sub.status === "pending"
+                  ? "Pending"
+                  : sub.status === "accepted"
+                    ? "Active"
+                    : sub.status === "rejected"
+                      ? "Rejected"
+                      : sub.status}
               </Text>
             </View>
           </View>
@@ -110,7 +118,13 @@ export default function MySubscriptionsScreen() {
           </View>
 
           {/* Actions */}
-          {sub.status === "active" && (
+          {sub.status === "pending" && (
+            <Text style={{ color: "#f59e0b", marginTop: 10 }}>
+              Waiting for vendor approval
+            </Text>
+          )}
+
+          {sub.status === "accepted" && (
             <View style={styles.actions}>
               <TouchableOpacity style={styles.manageBtn}>
                 <Text style={styles.manageText}>Manage</Text>
@@ -122,16 +136,10 @@ export default function MySubscriptionsScreen() {
             </View>
           )}
 
-          {sub.status === "paused" && (
-            <View style={styles.actions}>
-              <TouchableOpacity style={styles.resumeBtn}>
-                <Text style={styles.pauseText}>Resume</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.pauseBtn}>
-                <Text style={styles.pauseText}>Cancel</Text>
-              </TouchableOpacity>
-            </View>
+          {sub.status === "rejected" && (
+            <Text style={{ color: "#ef4444", marginTop: 10 }}>
+              Subscription rejected by vendor
+            </Text>
           )}
         </View>
       ))}
@@ -233,7 +241,13 @@ const styles = StyleSheet.create({
   activeBadge: {
     backgroundColor: "#22c55e",
   },
+  pendingBadge: {
+    backgroundColor: "#f59e0b",
+  },
 
+  rejectedBadge: {
+    backgroundColor: "#ef4444",
+  },
   pauseBadge: {
     backgroundColor: "#f59e0b",
   },

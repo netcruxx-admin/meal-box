@@ -1,10 +1,12 @@
 import AppText from '@/components/AppText';
 import Button from '@/components/Button';
+import ErrorText from '@/components/ErrorText';
 import GoBack from '@/components/GoBack';
 import { colors } from '@/constants/theme';
 import { useRegisterMutation } from '@/services/authApi';
-import { useRouter } from 'expo-router';
+import { AuthErrors, hasErrors, validateRegisterForm } from '@/utils/authValidation';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,15 +18,14 @@ export default function RegisterScreen() {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [errors, setErrors] = useState<AuthErrors>({});
 
     const [register, { isLoading, error }] = useRegisterMutation();
 
     const handleRegister = async () => {
-        if (!name || !phone || !password) {
-            Toast.show({ type: 'error', text1: 'All fields are required' });
-            return;
-        }
-
+        const validationErrors = validateRegisterForm(name, phone, password);
+        setErrors(validationErrors);
+        if (hasErrors(validationErrors)) return;
         try {
             await register({
                 name,
@@ -62,24 +63,38 @@ export default function RegisterScreen() {
                 <TextInput
                     placeholder="Full Name"
                     value={name}
-                    onChangeText={setName}
-                    style={styles.input}
+                    onChangeText={(val) => {
+                        setName(val);
+                        setErrors(prev => ({ ...prev, fullName: undefined }));
+                    }}
+                    style={[styles.input, errors.fullName ? styles.inputError : null]}
                 />
+                <ErrorText message={errors.fullName} />
+
                 <AppText style={styles.label}>Phone</AppText>
 
                 <TextInput
                     value={phone}
-                    onChangeText={setPhone}
-                    style={styles.input}
+                    onChangeText={(val) => {
+                        setPhone(val);
+                        setErrors(prev => ({ ...prev, phone: undefined }));
+                    }}
+                    style={[styles.input, errors.phone ? styles.inputError : null]}
                     placeholder="Phone"
                     keyboardType="phone-pad"
                 />
+                <ErrorText message={errors.phone} />
+
+
                 <AppText style={styles.label}>Password</AppText>
-                <View style={styles.passwordWrapper}>
+                <View style={[styles.passwordWrapper, errors.password ? styles.inputError : null]}>
                     <TextInput
                         placeholder="Password"
                         value={password}
-                        onChangeText={setPassword}
+                        onChangeText={(val) => {
+                            setPassword(val);
+                            setErrors(prev => ({ ...prev, password: undefined }));
+                        }}
                         style={styles.passwordInput}
                         secureTextEntry={!showPassword}
                     />
@@ -87,14 +102,17 @@ export default function RegisterScreen() {
                         <Ionicons name={showPassword ? 'eye-off-outline' : 'eye-outline'} size={22} color="#9ca3af" />
                     </TouchableOpacity>
                 </View>
+                <ErrorText message={errors.password} />
 
-                <Button
-                    title={isLoading ? 'Creating...' : 'Create Account'}
-                    variant="fill"
-                    fullWidth
-                    disabled={isLoading}
-                    onPress={handleRegister}
-                />
+                <View style={{ marginTop: 20 }}>
+                    <Button
+                        title={isLoading ? 'Creating...' : 'Create Account'}
+                        variant="fill"
+                        fullWidth
+                        disabled={isLoading}
+                        onPress={handleRegister}
+                    />
+                </View>
 
                 <TouchableOpacity onPress={() => router.push('/(auth)/login')}>
                     <Text style={styles.linkText}>
@@ -131,7 +149,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 14,
         fontWeight: '600',
-        marginBottom: 6,
+        marginBottom: 4,
         color: '#111',
     },
     input: {
@@ -139,24 +157,11 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         padding: 14,
         borderRadius: 8,
-        marginBottom: 16,
+        marginBottom: 4,
         fontSize: 16,
     },
-    passwordWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 8,
-        marginBottom: 16,
-    },
-    passwordInput: {
-        flex: 1,
-        padding: 14,
-        fontSize: 16,
-    },
-    eyeBtn: {
-        paddingHorizontal: 14,
+    inputError: {
+        borderColor: '#ef4444',
     },
     linkText: {
         textAlign: 'center',
@@ -167,5 +172,21 @@ const styles = StyleSheet.create({
     link: {
         color: colors.primary,
         fontWeight: '600',
+    },
+    passwordWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        marginBottom: 4,
+    },
+    passwordInput: {
+        flex: 1,
+        padding: 14,
+        fontSize: 16,
+    },
+    eyeBtn: {
+        paddingHorizontal: 14,
     },
 });

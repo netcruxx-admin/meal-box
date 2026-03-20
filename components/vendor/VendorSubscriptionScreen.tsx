@@ -61,11 +61,19 @@ export default function VendorSubscriptionScreen({ vendorId }: Props) {
         price: plan.price,
         duration: plan.duration,
       }).unwrap();
-
-      Toast.show({ type: "success", text1: "Subscription created!" });
+  
+      Toast.show({
+        type: "success",
+        text1: "Request sent to vendor",
+        text2: "Waiting for approval",
+      });
+  
       router.replace("/(tabs)/Subscription");
     } catch (err: any) {
-      Toast.show({ type: "error", text1: err?.data?.message || "Subscription failed" });
+      Toast.show({
+        type: "error",
+        text1: err?.data?.message || "Subscription failed",
+      });
     }
   };
 

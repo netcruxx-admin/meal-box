@@ -5,6 +5,9 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -109,66 +112,129 @@ export default function EditProfileScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <GoBack />
-      <Text style={styles.header}>Edit Profile</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={{ flex: 1 }}
+    >
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.header}>
+          <GoBack />
+          <Text style={styles.title}>Edit Profile</Text>
+        </View>
 
-      <TextInput
-        placeholder="Full Name"
-        value={form.name}
-        onChangeText={(v) => handleChange('name', v)}
-        style={styles.input}
-      />
+        {/* Name */}
+        <View style={styles.field}>
+          <Text style={styles.label}>Full Name</Text>
+          <TextInput
+            placeholder="Enter your full name"
+            value={form.name}
+            onChangeText={(v) => handleChange('name', v)}
+            style={styles.input}
+          />
+        </View>
 
-      <TextInput
-        placeholder="Phone"
-        value={form.phone}
-        onChangeText={(v) => handleChange('phone', v)}
-        style={styles.input}
-        keyboardType="phone-pad"
-      />
+        {/* Phone */}
+        <View style={styles.field}>
+          <Text style={styles.label}>Phone Number</Text>
+          <TextInput
+            placeholder="Enter phone number"
+            value={form.phone}
+            onChangeText={(v) => handleChange('phone', v)}
+            style={styles.input}
+            keyboardType="phone-pad"
+          />
+        </View>
 
-      <Text>Address</Text>
-      <TextInput
-        placeholder="Address Line 1"
-        value={form.address.line1}
-        onChangeText={(v) => handleAddressChange('line1', v)}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Address Line 2 (Optional)"
-        value={form.address.line2}
-        onChangeText={(v) => handleAddressChange('line2', v)}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="City"
-        value={form.address.city}
-        onChangeText={(v) => handleAddressChange('city', v)}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="State"
-        value={form.address.state}
-        onChangeText={(v) => handleAddressChange('state', v)}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Pincode"
-        value={form.address.pincode}
-        onChangeText={(v) => handleAddressChange('pincode', v)}
-        style={styles.input}
-        keyboardType="number-pad"
-      />
+        {/* Address Section */}
+        <Text style={styles.sectionTitle}>Address</Text>
 
-      <Button
-        title={isUpdating ? 'Saving...' : 'Save Changes'}
-        variant="fill"
-        fullWidth
-        disabled={isUpdating}
-        onPress={handleSave}
-      />
-    </View>
+        <View style={styles.field}>
+          <Text style={styles.label}>Address Line 1</Text>
+          <TextInput
+            placeholder="House no, street"
+            value={form.address.line1}
+            onChangeText={(v) => handleAddressChange('line1', v)}
+            style={styles.input}
+          />
+        </View>
+
+        <View style={styles.field}>
+          <Text style={styles.label}>Address Line 2 (Optional)</Text>
+          <TextInput
+            placeholder="Landmark, area"
+            value={form.address.line2}
+            onChangeText={(v) => handleAddressChange('line2', v)}
+            style={styles.input}
+          />
+        </View>
+
+        <View style={styles.field}>
+          <Text style={styles.label}>City</Text>
+          <TextInput
+            placeholder="Enter city"
+            value={form.address.city}
+            onChangeText={(v) => handleAddressChange('city', v)}
+            style={styles.input}
+          />
+        </View>
+
+        <View style={styles.field}>
+          <Text style={styles.label}>State</Text>
+          <TextInput
+            placeholder="Enter state"
+            value={form.address.state}
+            onChangeText={(v) => handleAddressChange('state', v)}
+            style={styles.input}
+          />
+        </View>
+
+        <View style={styles.field}>
+          <Text style={styles.label}>Pincode</Text>
+          <TextInput
+            placeholder="Enter pincode"
+            value={form.address.pincode}
+            onChangeText={(v) => handleAddressChange('pincode', v)}
+            style={styles.input}
+            keyboardType="number-pad"
+          />
+        </View>
+
+        <View style={styles.field}>
+          <Text style={styles.label}>Pincode</Text>
+          <TextInput
+            placeholder="Enter pincode"
+            value={form.address.pincode}
+            onChangeText={(v) => handleAddressChange('pincode', v)}
+            style={styles.input}
+            keyboardType="number-pad"
+          />
+        </View>
+
+        <View style={styles.field}>
+          <Text style={styles.label}>Pincode</Text>
+          <TextInput
+            placeholder="Enter pincode"
+            value={form.address.pincode}
+            onChangeText={(v) => handleAddressChange('pincode', v)}
+            style={styles.input}
+            keyboardType="number-pad"
+          />
+        </View>
+
+        <Button
+          title={isUpdating ? 'Saving...' : 'Save Changes'}
+          variant="fill"
+          fullWidth
+          disabled={isUpdating}
+          onPress={handleSave}
+        />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -179,9 +245,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    fontSize: 24,
-    fontWeight: '700',
-    marginBottom: 24,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "600",
   },
   input: {
     borderWidth: 1,
@@ -189,7 +260,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 14,
     fontSize: 16,
-    marginBottom: 16,
+  },
+  field: {
+    marginBottom: 10,
+    // backgroundColor: 'red'
+  },
+
+  label: {
+    fontSize: 13,
+    color: '#6b7280',
+    marginBottom: 6,
+    fontWeight: '500',
+  },
+
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 10,
+    marginTop: 10,
   },
   center: {
     flex: 1,

@@ -40,7 +40,7 @@ export default function VendorCard({ vendor }: any) {
             {/* Right Content */}
             <View style={styles.content}>
                 <View style={styles.headerRow}>
-                    <AppText type='subTitle' style={styles.name}>{vendor.businessName}</AppText>
+                    <Text style={styles.name}>{vendor.businessName}</Text>
 
                     {/* Food Type Ribbon */}
                     <View style={[styles.ribbon, { backgroundColor: typeConfig.bg }]}>
@@ -54,7 +54,7 @@ export default function VendorCard({ vendor }: any) {
                     {vendor.address.line1}, {vendor.address.city}
                 </AppText>
 
-                <View
+                {/* <View
                     style={styles.priceRibbon}
                 >
                     <Text
@@ -62,7 +62,7 @@ export default function VendorCard({ vendor }: any) {
                     >
                         120/day
                     </Text>
-                </View>
+                </View> */}
             </View>
         </TouchableOpacity>
     );
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#D1D5DB',
         alignItems: 'stretch',
+        minHeight: 130
     },
 
     emojiBox: {
@@ -105,9 +106,11 @@ const styles = StyleSheet.create({
     },
 
     name: {
-        fontSize: 16,
+        fontSize: 20,
+        lineHeight: 24,
         flex: 1,
         marginRight: 8,
+        marginBottom: 5
     },
 
     address: {

@@ -132,12 +132,13 @@ const styles = StyleSheet.create({
   header: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: 40
+    marginBottom: 30
   },
   label: {
     fontSize: 14,
     fontWeight: '600',
     marginBottom: 6,
+    marginTop: 10,
     color: '#111',
   },
   input: {

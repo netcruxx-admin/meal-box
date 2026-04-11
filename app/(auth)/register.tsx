@@ -144,13 +144,14 @@ const styles = StyleSheet.create({
     header: {
         width: '100%',
         alignItems: 'center',
-        marginBottom: 40
+        marginBottom: 30
     },
     label: {
         fontSize: 14,
         fontWeight: '600',
         marginBottom: 4,
         color: '#111',
+        marginTop: 10,
     },
     input: {
         borderWidth: 1,

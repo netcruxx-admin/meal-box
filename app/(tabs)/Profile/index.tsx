@@ -11,9 +11,11 @@ export default function ProfileScreen() {
   const router = useRouter();
 
   const activeSubscription = subData?.subscriptions?.find(
-    (sub: any) => sub.status === 'active' || sub.status === 'paused'
+    (sub: any) =>
+      sub.status === 'accepted' ||
+      sub.status === 'active' ||
+      sub.status === 'paused'
   );
-
   if (isLoading) {
     return (
       <View style={styles.center}>
@@ -37,57 +39,70 @@ export default function ProfileScreen() {
     router.replace('/welcome');
   };
 
+  console.log(activeSubscription, 'activeSubscription');
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-      <View>
-        <Text style={styles.header}>Profile</Text>
+        <View>
+          <Text style={styles.header}>Profile</Text>
 
-        {/* User Info */}
-        <View style={styles.section}>
-          <Text style={styles.name}>{user?.name}</Text>
-          <Text style={styles.subText}>+91 {user?.phone}</Text>
-        </View>
+          {/* User Info */}
+          <View style={styles.section}>
+            <Text style={styles.name}>{user?.name}</Text>
+            <Text style={styles.subText}>+91 {user?.phone}</Text>
+          </View>
 
-        {/* Future Address Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Default Address</Text>
-          {user?.address ? (
-            <Text style={styles.subText}>
-              {user.address.line1},{'\n'}
-              {user.address.city}, {user.address.state} {user.address.pincode}
-            </Text>
-          ) : (
-            <Text style={styles.subText}>No address added</Text>
-          )}
-        </View>
+          {/* Future Address Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Default Address</Text>
+            {user?.address ? (
+              <Text style={styles.subText}>
+                {user.address.line1},{'\n'}
+                {user.address.city}, {user.address.state} {user.address.pincode}
+              </Text>
+            ) : (
+              <Text style={styles.subText}>No address added</Text>
+            )}
+          </View>
 
-        {/* Subscription Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Meal Subscription</Text>
-          {activeSubscription ? (
-            <View style={[styles.subCard, activeSubscription.status === 'active' ? styles.activeSubCard : styles.pausedSubCard]}>
-              <View style={styles.subCardHeader}>
-                <Text style={styles.subVendor}>{activeSubscription.vendor?.businessName}</Text>
-                <View style={[styles.badge, activeSubscription.status === 'active' ? styles.activeBadge : styles.pausedBadge]}>
-                  <Text style={styles.badgeText}>
-                    {activeSubscription.status === 'active' ? 'Active' : 'Paused'}
-                  </Text>
+          {/* Subscription Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Meal Subscription</Text>
+            {activeSubscription ? (
+              <View style={[styles.subCard, activeSubscription.status === 'active' ? styles.activeSubCard : styles.pausedSubCard]}>
+                <View style={styles.subCardHeader}>
+                  <Text style={styles.subVendor}>{activeSubscription.vendor?.businessName}</Text>
+                  <View
+                    style={[
+                      styles.badge,
+                      activeSubscription.status === 'accepted' || activeSubscription.status === 'active'
+                        ? styles.activeBadge
+                        : styles.pausedBadge,
+                    ]}
+                  >
+                    <Text style={styles.badgeText}>
+                      {activeSubscription.status === 'accepted'
+                        ? 'Active'
+                        : activeSubscription.status === 'active'
+                          ? 'Active'
+                          : 'Paused'}
+                    </Text>
+                  </View>
+                </View>
+                <Text style={styles.subPlan}>
+                  {activeSubscription.planType === 'weekly' ? 'Weekly Plan' : 'Monthly Plan'}
+                </Text>
+                <View style={styles.subRow}>
+                  <Text style={styles.subLabel}>Ends on:</Text>
+                  <Text style={styles.subValue}>{new Date(activeSubscription.endDate).toDateString()}</Text>
                 </View>
               </View>
-              <Text style={styles.subPlan}>
-                {activeSubscription.planType === 'weekly' ? 'Weekly Plan' : 'Monthly Plan'}
-              </Text>
-              <View style={styles.subRow}>
-                <Text style={styles.subLabel}>Ends on:</Text>
-                <Text style={styles.subValue}>{new Date(activeSubscription.endDate).toDateString()}</Text>
-              </View>
-            </View>
-          ) : (
-            <Text style={styles.subText}>No active subscription</Text>
-          )}
+            ) : (
+              <Text style={styles.subText}>No active subscription</Text>
+            )}
+          </View>
         </View>
-      </View>
       </ScrollView>
 
       <View style={styles.buttonContainer}>

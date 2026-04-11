@@ -45,7 +45,7 @@ export default function GoBack({
 
 const styles = StyleSheet.create({
   header: {
-    paddingVertical: 10,
+    // paddingVertical: 10,
   },
 
   backBtn: {

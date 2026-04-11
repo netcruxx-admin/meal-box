@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     fontSize: fonts.size.lg,
-    lineHeight: fonts.lineHeight.lg,
+    lineHeight: fonts.lineHeight.sm,
     color: '#1F2937',
   },
 })

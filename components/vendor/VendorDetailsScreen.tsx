@@ -81,10 +81,9 @@ export default function VendorDetailsScreen({ vendorId }: Props) {
                         <Ionicons name="arrow-back" size={20} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.favBtn}>
+                    {/* <TouchableOpacity style={styles.favBtn}>
                         <Ionicons name="heart-outline" size={20} />
-                    </TouchableOpacity>
-
+                    </TouchableOpacity> */}
                     <Text style={styles.emoji}>🍛</Text>
                 </View>
 

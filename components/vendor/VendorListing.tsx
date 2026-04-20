@@ -52,9 +52,9 @@ export default function VendorListing() {
                 <AppText type='title'>Vendors</AppText>
 
                 <View style={styles.iconsContainer}>
-                    <TouchableOpacity style={styles.iconButton}>
+                    {/* <TouchableOpacity style={styles.iconButton}>
                         <Ionicons name="notifications-outline" size={22} color="#111827" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <TouchableOpacity style={styles.iconButton} onPress={() => router.push('/Profile')}>
                         <Ionicons name="person-outline" size={22} color="#111827" />

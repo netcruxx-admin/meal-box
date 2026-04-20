@@ -1,77 +1,74 @@
-import TabIcon from '@/components/TabIcon';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { colors } from '@/constants/theme';
+import { useProfileCompletion } from '@/hooks/useProfileCompletion';
 import { getToken } from '@/utils/authStorage';
 import { Ionicons } from '@expo/vector-icons';
 import { Redirect, Tabs } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
-  const [loading, setLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const { isLoading: profileLoading } = useProfileCompletion();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const token = await getToken();
-      setIsLoggedIn(!!token);
-      setLoading(false);
-    };
-
-    checkAuth();
+    getToken().then((token) => setIsLoggedIn(!!token));
   }, []);
 
-  if (loading) return null;
+  if (isLoggedIn === null || profileLoading) return null;
 
   if (!isLoggedIn) {
     return <Redirect href="/welcome" />;
   }
-  
+
   type TabItem = {
     name: string;
     label: string;
-    icon: keyof typeof Ionicons.glyphMap;
+    icon: {
+      active: string;
+      inactive: string;
+    };
   };
 
   const tabs: TabItem[] = [
     {
       name: "index",
       label: "Home",
-      icon: "home-outline",
+      icon: {
+        active: "home",
+        inactive: "home-outline",
+      },
     },
-    // {
-    //   name: "Orders",
-    //   label: "Orders",
-    //   icon: "menu",
-    // },
     {
       name: "Subscription",
       label: "Subscription",
-      icon: "fast-food-outline",
+      icon: {
+        active: "fast-food",
+        inactive: "fast-food-outline",
+      },
     },
     {
       name: "Profile",
       label: "Profile",
-      icon: "person-outline",
+      icon: {
+        active: "person",
+        inactive: "person-outline",
+      },
     },
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }} edges={['top', 'left', 'right', 'bottom']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }} edges={['top', 'left', 'right']}>
       <Tabs
         screenOptions={{
           headerShown: false,
-          tabBarShowLabel: false,
-          tabBarInactiveTintColor: "#ffffff40",
-          tabBarActiveTintColor: "#ffffff",
-          tabBarStyle: {
-            backgroundColor: "white",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            shadowColor: "transparent",
-          },
+          tabBarShowLabel: true,
+          tabBarInactiveTintColor: "#6b7280",
+          tabBarActiveTintColor: colors.primary,
+          tabBarBackground: () => (
+            <View style={{ flex: 1, backgroundColor: '#ffffff' }} />
+          ),
+          tabBarStyle: { paddingTop: 8 },
         }}
       >
         {tabs.map((tab) => (
@@ -79,19 +76,15 @@ export default function TabLayout() {
             key={tab.name}
             name={tab.name}
             options={{
-              tabBarIcon: ({ focused }) => (
-                <TabIcon
-                  focused={focused}
-                  label={tab.label}
-                  icon={
-                    <Ionicons
-                      name={tab.icon as any}
-                      size={25}
-                    // color={focused ? "#000" : "#777"}
-                    />
-                  }
+              title: tab.label,
+              tabBarLabel: tab.label,
+              tabBarIcon: ({ color, focused }) => (
+                <Ionicons
+                  name={focused ? tab.icon.active : tab.icon.inactive}
+                  size={24}
+                  color={color}
                 />
-              ),
+              )
             }}
           />
         ))}

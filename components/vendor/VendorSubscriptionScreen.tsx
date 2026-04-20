@@ -3,7 +3,7 @@ import { useGetVendorByIdQuery, useGetVendorPlansQuery } from "@/services/vendor
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 import Button from "../Button";
 import GoBack from "../GoBack";
@@ -61,13 +61,13 @@ export default function VendorSubscriptionScreen({ vendorId }: Props) {
         price: plan.price,
         duration: plan.duration,
       }).unwrap();
-  
+
       Toast.show({
         type: "success",
         text1: "Request sent to vendor",
         text2: "Waiting for approval",
       });
-  
+
       router.replace("/(tabs)/Subscription");
     } catch (err: any) {
       Toast.show({
@@ -83,97 +83,95 @@ export default function VendorSubscriptionScreen({ vendorId }: Props) {
       : { type: "monthly", price: monthlyPrice, duration: 30 };
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
+    <View style={styles.wrapper}>
+      <View style={styles.container}>
+          {/* Header */}
+          <View style={styles.header}>
+            <GoBack />
 
-        {/* Header */}
-        <View style={styles.header}>
-          <GoBack />
-
-          <Text style={styles.title}>Choose Your Plan</Text>
-        </View>
-
-        <Text style={styles.vendorName}>
-          {vendorData?.vendor?.businessName}
-        </Text>
-
-        {/* Weekly Plan */}
-        <TouchableOpacity
-          style={[
-            styles.card,
-            selectedPlan === "weekly" && styles.selectedCard,
-          ]}
-          onPress={() => setSelectedPlan("weekly")}
-        >
-          <View style={styles.cardHeader}>
-            <Text style={styles.planTitle}>Weekly Plan</Text>
-
-            {selectedPlan === "weekly" ? (
-              <View style={styles.selectedIcon}>
-                <Ionicons name="checkmark" size={16} color="#fff" />
-              </View>
-            ) : (
-              <View style={styles.circle} />
-            )}
+            <Text style={styles.title}>Choose Your Plan</Text>
           </View>
 
-          <Text style={styles.planType}>
-            {formatPlanType(weeklyPlanType)}
+          <Text style={styles.vendorName}>
+            {vendorData?.vendor?.businessName}
           </Text>
 
-          <Text style={styles.subtitle}>7 days subscription</Text>
+          {/* Weekly Plan */}
+          <TouchableOpacity
+            style={[
+              styles.card,
+              selectedPlan === "weekly" && styles.selectedCard,
+            ]}
+            onPress={() => setSelectedPlan("weekly")}
+          >
+            <View style={styles.cardHeader}>
+              <Text style={styles.planTitle}>Weekly Plan</Text>
 
-          <Text style={styles.feature}>✓ Fresh meals daily</Text>
-          <Text style={styles.feature}>✓ Flexible delivery time</Text>
-          <Text style={styles.feature}>✓ Cancel anytime</Text>
+              {selectedPlan === "weekly" ? (
+                <View style={styles.selectedIcon}>
+                  <Ionicons name="checkmark" size={16} color="#fff" />
+                </View>
+              ) : (
+                <View style={styles.circle} />
+              )}
+            </View>
 
-          <View style={styles.priceRow}>
-            <Text style={styles.price}>₹{weeklyPrice}</Text>
-            <Text style={styles.duration}> /week</Text>
+            <Text style={styles.planType}>
+              {formatPlanType(weeklyPlanType)}
+            </Text>
 
-            <Text style={styles.discount}>Save {weeklyDiscount}%</Text>
-          </View>
-        </TouchableOpacity>
+            <Text style={styles.subtitle}>7 days subscription</Text>
 
-        {/* Monthly Plan */}
-        <TouchableOpacity
-          style={[
-            styles.card,
-            selectedPlan === "monthly" && styles.selectedCard,
-          ]}
-          onPress={() => setSelectedPlan("monthly")}
-        >
-          <View style={styles.cardHeader}>
-            <Text style={styles.planTitle}>Monthly Plan</Text>
+            <Text style={styles.feature}>✓ Fresh meals daily</Text>
+            <Text style={styles.feature}>✓ Flexible delivery time</Text>
+            <Text style={styles.feature}>✓ Cancel anytime</Text>
 
-            {selectedPlan === "monthly" ? (
-              <View style={styles.selectedIcon}>
-                <Ionicons name="checkmark" size={16} color="#fff" />
-              </View>
-            ) : (
-              <View style={styles.circle} />
-            )}
-          </View>
+            <View style={styles.priceRow}>
+              <Text style={styles.price}>₹{weeklyPrice}</Text>
+              <Text style={styles.duration}> /week</Text>
 
-          <Text style={styles.planType}>
-            {formatPlanType(monthlyPlanType)}
-          </Text>
+              <Text style={styles.discount}>Save {weeklyDiscount}%</Text>
+            </View>
+          </TouchableOpacity>
 
-          <Text style={styles.subtitle}>30 days subscription</Text>
+          {/* Monthly Plan */}
+          <TouchableOpacity
+            style={[
+              styles.card,
+              selectedPlan === "monthly" && styles.selectedCard,
+            ]}
+            onPress={() => setSelectedPlan("monthly")}
+          >
+            <View style={styles.cardHeader}>
+              <Text style={styles.planTitle}>Monthly Plan</Text>
 
-          <Text style={styles.feature}>✓ Fresh meals daily</Text>
-          <Text style={styles.feature}>✓ Flexible delivery time</Text>
-          <Text style={styles.feature}>✓ Priority support</Text>
+              {selectedPlan === "monthly" ? (
+                <View style={styles.selectedIcon}>
+                  <Ionicons name="checkmark" size={16} color="#fff" />
+                </View>
+              ) : (
+                <View style={styles.circle} />
+              )}
+            </View>
 
-          <View style={styles.priceRow}>
-            <Text style={styles.price}>₹{monthlyPrice}</Text>
-            <Text style={styles.duration}> /month</Text>
+            <Text style={styles.planType}>
+              {formatPlanType(monthlyPlanType)}
+            </Text>
 
-            <Text style={styles.discount}>Save {monthlyDiscount}%</Text>
-          </View>
-        </TouchableOpacity>
+            <Text style={styles.subtitle}>30 days subscription</Text>
 
-      </ScrollView>
+            <Text style={styles.feature}>✓ Fresh meals daily</Text>
+            <Text style={styles.feature}>✓ Flexible delivery time</Text>
+            <Text style={styles.feature}>✓ Priority support</Text>
+
+            <View style={styles.priceRow}>
+              <Text style={styles.price}>₹{monthlyPrice}</Text>
+              <Text style={styles.duration}> /month</Text>
+
+              <Text style={styles.discount}>Save {monthlyDiscount}%</Text>
+            </View>
+          </TouchableOpacity>
+      </View>
 
       {/* Subscribe Button */}
       <View style={styles.footer}>
@@ -189,10 +187,14 @@ export default function VendorSubscriptionScreen({ vendorId }: Props) {
   );
 }
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: '#FFF',
+  },
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    paddingTop: 30,
   },
 
   header: {
@@ -286,8 +288,15 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    paddingVertical: 20,
+    padding: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E7EB',
+    backgroundColor: '#FFF',
   },
+
+  // footer: {
+  //   paddingVertical: 20,
+  // },
   planType: {
     marginTop: 6,
     fontSize: 14,

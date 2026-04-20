@@ -19,6 +19,7 @@ type Vendor = {
     user: {
         name: string;
         phone: string;
+        isDeleted: boolean;
     };
 };
 

@@ -76,12 +76,15 @@ export default function RegisterScreen() {
                 <TextInput
                     value={phone}
                     onChangeText={(val) => {
-                        setPhone(val);
-                        setErrors(prev => ({ ...prev, phone: undefined }));
+                        if (val.length <= 10) {
+                            setPhone(val);
+                            setErrors(prev => ({ ...prev, phone: undefined }));
+                        }
                     }}
                     style={[styles.input, errors.phone ? styles.inputError : null]}
                     placeholder="Phone"
                     keyboardType="phone-pad"
+                    maxLength={10}
                 />
                 <ErrorText message={errors.phone} />
 

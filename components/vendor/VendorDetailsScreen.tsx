@@ -387,7 +387,7 @@ export default function VendorDetailsScreen({ vendorId }: Props) {
                                                 <AppText weight="semiBold">{review.user?.name ?? 'Deleted User'}</AppText>
                                                 <StarDisplay rating={review.rating} />
                                             </View>
-                                            <AppText style={styles.reviewDate}>
+                                            <AppText style={styles.reviewDate} type='description'>
                                                 {new Date(review.createdAt).toLocaleDateString('en-US', {
                                                     month: 'short',
                                                     day: 'numeric',
@@ -400,6 +400,7 @@ export default function VendorDetailsScreen({ vendorId }: Props) {
                                             <AppText style={styles.reviewComment}>{review.comment}</AppText>
                                         ) : null}
 
+                                        {/* Edit/Delete actions hidden until backend supports it
                                         {review.user?._id === currentUserId && !editingReview && (
                                             <View style={styles.reviewActions}>
                                                 <TouchableOpacity
@@ -418,6 +419,7 @@ export default function VendorDetailsScreen({ vendorId }: Props) {
                                                 </TouchableOpacity>
                                             </View>
                                         )}
+                                        */}
                                     </View>
                                 ))
                             )}

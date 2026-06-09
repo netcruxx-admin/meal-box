@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextProps } from 'react-native'
 
 export type AppTextProps = TextProps & {
   weight?: 'regular' | 'medium' | 'semiBold' | 'bold'
-  type?: 'default' | 'title' | 'subTitle'
+  type?: 'default' | 'title' | 'subTitle' | 'description'
   align?: 'left' | 'center' | 'right'
 }
 
@@ -27,6 +27,8 @@ export default function AppText({
         type === 'default' ? styles.default : undefined,
         type === 'title' ? styles.title : undefined,
         type === 'subTitle' ? styles.subTitle : undefined,
+        type === 'description' ? styles.description : undefined,
+
       ]}
       {...rest}
     />
@@ -65,4 +67,9 @@ const styles = StyleSheet.create({
     lineHeight: fonts.lineHeight.sm,
     color: '#1F2937',
   },
+  description: {
+    fontSize: fonts.size.sm,
+    lineHeight: fonts.lineHeight.sm,
+    color: '#1F2937',
+  }
 })
